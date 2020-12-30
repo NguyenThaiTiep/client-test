@@ -6,7 +6,7 @@ import { UserApi } from "../../../api/user/user";
 import { AuthApi } from "../../../api/admin/authenticate";
 
 const initialState = {
-  token: "",
+  token: "0",
   account: {} as AccountDto,
 } as AccountResponseDto;
 export const UserReducer = (state = initialState, action: {}) => {
@@ -21,7 +21,7 @@ export const UserReducer = (state = initialState, action: {}) => {
           data: actionEmit.payload.token,
         });
       }
-      newState = { ...state, account: actionEmit.payload.account };
+      newState = { ...state, account: actionEmit.payload.account, token: "1" };
       return newState;
     }
     case ActionUser.USER_CHANGE_AVATAR:

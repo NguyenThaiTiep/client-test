@@ -4,7 +4,7 @@ export const condition = {
   minPrice: 0,
   maxPrice: 1000000000,
   minS: 0,
-  maxS: 1000,
+  maxS: 10000000,
   apartmentTypeId: undefined,
   provinceId: 1,
   districtId: undefined,

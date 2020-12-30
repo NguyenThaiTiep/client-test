@@ -1,9 +1,10 @@
 import axios from "axios";
 import { history } from "../app/App";
+import { dirServer } from "../libs/dir";
 // import { configureFakeBackend } from '../services/fake-backend';
 
 const API = axios.create({
-  baseURL: "http://192.168.43.89:3000",
+  baseURL: dirServer,
   responseType: "json",
 });
 

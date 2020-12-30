@@ -158,8 +158,8 @@ export const AddApartment = (props: Props) => {
     if (res.data.status === 200) {
       await createApartmentDetails(res.data.result.id);
     } else {
+      handleToast(res.data);
     }
-    handleToast(res.data);
   };
 
   const createApartmentDetails = async (id: number) => {
@@ -207,7 +207,6 @@ export const AddApartment = (props: Props) => {
     let formData = new FormData();
     formData.append("image", file);
     ApartmentApi.upload(formData).then((res) => {
-      handleToast(res.data);
       if (res.data.status === 200) {
         let imgs = { ...apartment.apartmentDetail }.images || [];
         imgs.push(res.data.result);
@@ -216,6 +215,8 @@ export const AddApartment = (props: Props) => {
           ...apartment.apartmentDetail,
           images: imgs,
         });
+      } else {
+        handleToast(res.data);
       }
     });
   };

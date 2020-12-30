@@ -6,7 +6,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Avatar, Chip, makeStyles } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Carousel, Col, Image, Row, Table, Button } from "react-bootstrap";
 import ReactHtmlParser from "react-html-parser";
 import {
@@ -77,6 +77,7 @@ export const ApartmentDetailItem = (props: Props) => {
   const classes = useStyles();
   const history = useHistory();
   const { apartment } = props;
+
   const getAddress = () => {
     return `${apartment?.streetNo ? apartment?.streetNo + "," : ""}
     ${apartment?.street?.name ? apartment?.street?.name + "," : ""}
@@ -87,6 +88,11 @@ export const ApartmentDetailItem = (props: Props) => {
   const user = useSelector(
     (state: RootState) => state.UserReducer.account as AccountDto
   );
+  useEffect(() => {
+    if (!apartment.user) {
+      apartment.user = user;
+    }
+  }, [apartment]);
   const addToHobby = () => {
     ApartmentApi.saveToHobby(apartment.id).then((res) => {
       handleToast(res.data);
@@ -261,32 +267,35 @@ export const ApartmentDetailItem = (props: Props) => {
           ))}
         </div>
       </div>
-      <div className="d-flex user-info ">
-        <div className=" user-item" style={{ flexGrow: 1 }}>
-          <Avatar
-            src={apartment?.user?.avatar?.url ??""}
-            className={classes.large}
-          />
-          <div className="user">
-            <div className="name">{apartment?.user?.name}</div>
-            <div className="time">
-              Đã tham gia {NumberDateJoin(apartment?.user?.create_at)}
+      {apartment.user && (
+        <div className="d-flex user-info ">
+          <div className=" user-item" style={{ flexGrow: 1 }}>
+            <Avatar
+              src={apartment?.user?.avatar?.url || user.avatar?.url}
+              className={classes.large}
+            />
+            <div className="user">
+              <div className="name">{apartment?.user?.name || user.name}</div>
+              <div className="time">
+                Đã tham gia{" "}
+                {NumberDateJoin(apartment?.user?.create_at || new Date())}
+              </div>
+            </div>
+          </div>
+          <div className="box ">
+            <div className="contact-box">
+              <div className="contact">
+                <FontAwesomeIcon icon={faPhoneAlt} color={"#009177"} />
+                <span>{apartment?.user?.contactUser?.phone}</span>
+              </div>
+              <div className="reviewStar">
+                <FontAwesomeIcon icon={faStar} color={"#009177"} />
+                <span> 4.5</span>
+              </div>
             </div>
           </div>
         </div>
-        <div className="box ">
-          <div className="contact-box">
-            <div className="contact">
-              <FontAwesomeIcon icon={faPhoneAlt} color={"#009177"} />
-              <span>{apartment?.user?.contactUser?.phone}</span>
-            </div>
-            <div className="reviewStar">
-              <FontAwesomeIcon icon={faStar} color={"#009177"} />
-              <span> 4.5</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      )}
       {apartment.isApprove ? (
         <>
           <div className="row review-share ">

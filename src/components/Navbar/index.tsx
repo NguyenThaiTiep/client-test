@@ -73,10 +73,10 @@ const HeaderItem = () => {
   }, []);
   useEffect(() => {
     let token = localStorage.getItem("token");
-    if (user && user.account?.id&&token&&token!='') {
+    if (user && user.account?.id && token && token != "") {
       loadNotificationNews(store);
     }
-  }, [user]);
+  }, [location]);
   const getName = () => {
     let name = { ...user }.account?.name as string;
     if (name) return name.split(" ").reverse().shift();
@@ -101,12 +101,14 @@ const HeaderItem = () => {
           </NavDropdown.Item>
           <NavDropdown.Item onClick={clear}>Đăng xuất</NavDropdown.Item>
         </NavDropdown>
-        {user.account?.role?.isCreateApartment ? <Button
+        {user.account?.role?.isCreateApartment && user.account.isApprove ? (
+          <Button
             className={"post-button"}
             onClick={(e) => history.push("/apartment/add")}
-        >
-          Đăng Tin
-        </Button> : null}
+          >
+            Đăng Tin
+          </Button>
+        ) : null}
       </div>
     ) : (
       <Button className={"post-button"} onClick={(e) => history.push("/login")}>
@@ -130,25 +132,19 @@ const HeaderItem = () => {
                 onClick={() => history.push("/home")}
                 active={active === "/home"}
               >
-                <div className={"text-navbar"}>
-                  Trang chủ
-                </div>
+                <div className={"text-navbar"}>Trang chủ</div>
               </Nav.Link>
               <Nav.Link
                 onClick={() => history.push("/link")}
                 active={active === "/link"}
               >
-                <div className={"text-navbar"}>
-                  Giới thiệu
-                </div>
+                <div className={"text-navbar"}>Giới thiệu</div>
               </Nav.Link>
               <Nav.Link
                 onClick={() => history.push("/terms")}
                 active={active === "/terms"}
               >
-                <div className={"text-navbar"}>
-                  Điều khoản
-                </div>
+                <div className={"text-navbar"}>Điều khoản</div>
               </Nav.Link>
             </Nav>
             {user?.account?.id &&
